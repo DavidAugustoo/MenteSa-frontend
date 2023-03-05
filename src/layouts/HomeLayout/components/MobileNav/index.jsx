@@ -10,7 +10,6 @@ import {
   Text,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
@@ -94,8 +93,6 @@ export const MobileNav = ({ onOpen, ...rest }) => {
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}
             >
-              <MenuItem>Meu Perfil</MenuItem>
-              <MenuDivider />
               <MenuItem onClick={handleSingOut}>Sair</MenuItem>
             </MenuList>
           </Menu>

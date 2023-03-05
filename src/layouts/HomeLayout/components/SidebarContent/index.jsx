@@ -6,15 +6,23 @@ import {
   useColorModeValue,
   Image,
 } from '@chakra-ui/react'
-import { FiHome, FiTrendingUp, FiCompass } from 'react-icons/fi'
+import {
+  FiHome,
+  FiTrendingUp,
+  FiCompass,
+  FiFolder,
+  FiCalendar,
+} from 'react-icons/fi'
 
 import menteSaLogo from '../../../../assets/mentesa-light.svg'
 import { NavItem } from '../NavItem'
 
 const LinkItems = [
   { name: 'Home', icon: FiHome, path: '/dashboard' },
+  { name: 'Agenda', icon: FiCalendar, path: '/dashboard/agenda' },
   { name: 'Pacientes', icon: FiTrendingUp, path: '/dashboard/paciente' },
   { name: 'Sessões', icon: FiCompass, path: '/dashboard/sessao' },
+  { name: 'Recursos', icon: FiFolder, path: '/dashboard/recursos' },
 ]
 
 export const SidebarContent = ({ onClose, ...rest }) => {

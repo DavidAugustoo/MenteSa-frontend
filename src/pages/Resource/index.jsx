@@ -1,60 +1,31 @@
-import React, { useState, useEffect } from 'react'
-
 import { Flex, Spinner, useToast } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import AddButton from '../../components/AddButton'
-import SessionTable from './components/SessionTable'
-import sessionService from '../../services/session/session.service'
-import SessionModal from './components/SessionModal'
+import resourceService from '../../services/resource/resource.service'
+import ResourceModal from './components/ResourceModal'
+import ResourceTable from './components/ResourceTable'
 
-export function SessionPage() {
+const ResourcePage = () => {
   const toast = useToast()
-  const [sessions, setSessions] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [resources, setResources] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const defaultSession = {
+  const defaultResource = {
     id: '',
-    patient_id: [],
-    appointment_date: '',
-    status: '',
-    session_type: '',
-    resource_ids: [],
-    duration: '',
-    topic: '',
+    title: '',
+    description: '',
+    category: '',
   }
-  const [selectedSession, setSelectedSession] = useState(defaultSession)
+  const [selectedResource, setSelectedResource] = useState(defaultResource)
   const [refresh, setRefresh] = useState(Math.random())
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleOnAddSession = () => {
-    setSelectedSession(defaultSession)
+  const handleOnAddResource = () => {
+    setSelectedResource(defaultResource)
     setIsModalOpen(true)
   }
-  const handleOnClickSession = (session) => {
-    const {
-      _id: id,
-      patient,
-      // eslint-disable-next-line camelcase
-      appointment_date,
-      status,
-      // eslint-disable-next-line camelcase
-      session_type,
-      // eslint-disable-next-line camelcase
-      resource_ids,
-      duration,
-      topic,
-    } = session
-    setSelectedSession({
-      id,
-      patient_id: patient.map((p) => p._id),
-      // eslint-disable-next-line camelcase
-      appointment_date,
-      status,
-      // eslint-disable-next-line camelcase
-      session_type,
-      // eslint-disable-next-line camelcase
-      resource_ids,
-      duration,
-      topic,
-    })
+  const handleOnClickResource = (resource) => {
+    const { _id: id, title, description, category } = resource
+    setSelectedResource({ id, title, description, category })
     setIsModalOpen(true)
   }
   const handleOnCloseModal = () => {
@@ -62,7 +33,7 @@ export function SessionPage() {
   }
   const handleOnDeleteModal = async (id) => {
     setIsLoading(true)
-    const result = await sessionService.remove(id)
+    const result = await resourceService.remove(id)
     const message = result.isErr ? result.error.message : result.value
     toast({
       title: message,
@@ -74,11 +45,11 @@ export function SessionPage() {
     setRefresh(Math.random())
     handleOnCloseModal()
   }
-  const handleOnSubmitModal = async (sessionData) => {
+  const handleOnSubmitModal = async (resourceData) => {
     setIsLoading(true)
-    const result = sessionData.id.length
-      ? await sessionService.update(sessionData)
-      : await sessionService.create(sessionData)
+    const result = resourceData.id.length
+      ? await resourceService.update(resourceData)
+      : await resourceService.create(resourceData)
     const message = result.isErr ? result.error.message : result.value
     toast({
       title: message,
@@ -94,7 +65,7 @@ export function SessionPage() {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
-      const result = await sessionService.getAll()
+      const result = await resourceService.getAll()
       if (result.isErr) {
         toast({
           title: result.error.message,
@@ -104,7 +75,7 @@ export function SessionPage() {
         })
       }
 
-      setSessions(result.value)
+      setResources(result.value)
     }
     fetchData().then(() => {
       setIsLoading(false)
@@ -128,18 +99,20 @@ export function SessionPage() {
   return (
     <Flex direction="column" alignItems="center">
       <AddButton
-        label="Adicionar sessão"
-        onClick={handleOnAddSession}
+        label="Adicionar recurso"
+        onClick={handleOnAddResource}
         disabled={isLoading}
       />
-      <SessionTable onClick={handleOnClickSession} sessions={sessions} />
-      <SessionModal
+      <ResourceTable onClick={handleOnClickResource} resources={resources} />
+      <ResourceModal
         isOpen={isModalOpen}
         onClose={handleOnCloseModal}
-        session={selectedSession}
+        resource={selectedResource}
         onDelete={handleOnDeleteModal}
         onSubmit={handleOnSubmitModal}
       />
     </Flex>
   )
 }
+
+export default ResourcePage

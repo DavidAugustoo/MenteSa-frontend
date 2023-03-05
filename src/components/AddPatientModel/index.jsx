@@ -12,7 +12,6 @@ import { api } from '../../services/api'
 
 export function AddPatientModel({ addPatient, setPacientes }) {
   const toast = useToast()
-  const token = localStorage.getItem('@Auth:token')
 
   const {
     register,
@@ -24,9 +23,7 @@ export function AddPatientModel({ addPatient, setPacientes }) {
 
   async function handleAddPatient(data) {
     try {
-      await api.post('/user/patient/register', data, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      await api.post('/user/patient/register', data)
       setPacientes((oldValue) => [data, ...oldValue])
       toast({
         title: 'Usuário adicionado com sucesso',
@@ -50,7 +47,7 @@ export function AddPatientModel({ addPatient, setPacientes }) {
 
   return (
     <TemplateModal
-      title="Editar Paciente"
+      title="Adicionar Paciente"
       formData={formData}
       isOpen={addPatient.isOpen}
       onOpen={addPatient.onOpen}

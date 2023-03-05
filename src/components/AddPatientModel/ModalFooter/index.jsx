@@ -13,7 +13,7 @@ export function ModalFooter({ onClose, handleAddPatient }) {
         mr={3}
         onClick={handleAddPatient}
       >
-        <Text fontSize="lg">Entrar</Text>
+        <Text fontSize="lg">Adicionar</Text>
       </Button>
       <Button onClick={onClose}>Cancelar</Button>
     </>
